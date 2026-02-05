@@ -3,171 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <title>5505 Check-In</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAGABoAwAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx6Ogx6Ogx6OgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx6Ogx6Ogx6OgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx6Ogx6Ogx6OgArU4ArU4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx6Ogx6Ogx6OgArU4ArU4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx6Ogx6Ogx6Ogx6OgArU4ArU4ArU4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx6Ogx6Ogx6OgAAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAAAAAAAAAAAAAAAAAAAx6Ogx6Ogx6OgAAAAArU4ArU4ArU4ArU4ArU4AAAAAAAAAAAAAAAAAAAAAAAAAAAAx6Ogx6OgAAAAAAAAAAAAArU4ArU4AAAAArU4ArU4ArU4AAAAAAAAAAAAAAAAAAAAx6Ogx6OgAAAAAAAAAAAAArU4ArU4ArU4AAAAAAAAArU4AAAAAAAAAAAAAAAAAAAAx6OgAAAAAAAAAAAAAAAAAAAAArU4AAAAArU4ArU4ArU4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAAAAAAAAAAAArU4AAAAAAAAAAAAArU4AAAAArU4AAAAArU4AAAAAAAAAAAAArU4AAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAAAArU4AAAAArU4AAAAArU4ArU4ArU4AAAAArU4AAAAAAAAAAAAArU4AAAAAAAAAAAAArU4AAAAArU4AAAAArU4AAAAAAAAAAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAAAArU4ArU4ArU4AAADv/wAA7/8AAMP/AADT/wAAkf8AALEfAAAwfwAAeR8AAHjfAAD9HwAA//8AABERAADdXQAAEVEAAHdXAAAREQAA" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --bg-gradient: radial-gradient(circle at top left, #1e293b, #0f172a);
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --success: #10b981;
+    /* Colors extracted from the Volts Logo */
+    --volts-green: #377344;   /* The "V" color */
+    --volts-yellow: #dce74e;  /* The Lightning Bolt color */
+    --volts-dark: #1a261c;    /* Deep background */
+    --volts-slate: #2f3a30;   /* Card background */
+    --text-white: #ffffff;
     --error: #ef4444;
   }
 
   * { box-sizing: border-box; }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: #0f172a; /* Fallback */
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
-    color: var(--text-main);
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--volts-dark);
+    /* A subtle technical grid pattern in the background */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    color: var(--text-white);
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
     margin: 0;
     padding: 20px;
   }
 
   .box {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--volts-slate);
     padding: 40px 30px;
-    border-radius: 24px;
+    /* Sharp corners like the lightning bolt */
+    border-radius: 4px; 
     width: 100%;
-    max-width: 380px;
+    max-width: 360px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    transform: translateY(0);
-    transition: transform 0.3s ease;
+    /* The Green "V" border accent at the top */
+    border-top: 6px solid var(--volts-green);
+    border-bottom: 2px solid var(--volts-green);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
   }
 
-  /* Icon Animation */
-  .icon-wrapper {
-    background: rgba(99, 102, 241, 0.1);
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px auto;
-    color: var(--primary);
-  }
-  
-  .icon-wrapper svg {
-    width: 32px;
-    height: 32px;
+  /* Decorative Lightning Bolt Effect in background of card */
+  .box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 45%, rgba(220, 231, 78, 0.03) 50%, transparent 55%);
+    z-index: 0;
+    pointer-events: none;
   }
 
   h2 {
-    margin: 0 0 8px 0;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
-  p.subtitle {
-    margin: 0 0 30px 0;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-  }
-
-  .input-group {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
     position: relative;
-    margin-bottom: 15px;
+    z-index: 1;
+  }
+
+  /* Making the "Check-In" text pop with the yellow */
+  h2 span {
+    color: var(--volts-yellow);
+  }
+
+  p {
+    color: #aebcb0;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
   }
 
   input {
     width: 100%;
-    padding: 16px;
-    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    margin-bottom: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--volts-green);
+    border-radius: 4px;
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
     font-size: 16px;
-    transition: all 0.2s ease;
+    font-family: 'Roboto', sans-serif;
     outline: none;
-  }
-
-  input:focus {
-    border-color: var(--primary);
-    background: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    transition: all 0.2s;
+    position: relative;
+    z-index: 1;
   }
 
   input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  input:focus {
+    /* When focused, it glows with the Bolt Yellow */
+    border-color: var(--volts-yellow);
+    box-shadow: 0 0 15px rgba(220, 231, 78, 0.2);
   }
 
   button {
     width: 100%;
-    padding: 16px;
-    border-radius: 12px;
+    padding: 15px;
+    background: var(--volts-green);
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     border: none;
-    font-size: 16px;
-    font-weight: 600;
-    background: var(--primary);
-    color: white;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
   }
 
+  /* Button Hover Effect: High Voltage */
   button:hover {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
+    background: var(--volts-yellow);
+    color: var(--volts-dark); /* Dark text on yellow bg for contrast */
+    box-shadow: 0 0 20px rgba(220, 231, 78, 0.4);
+    transform: skewX(-2deg); /* Slight angular tilt */
   }
 
   button:active {
-    transform: translateY(0);
-  }
-
-  button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+    transform: scale(0.98);
   }
 
   /* Status Messages */
   #status {
     margin-top: 20px;
-    font-size: 0.95rem;
     font-weight: 500;
-    min-height: 24px;
-    opacity: 0;
-    transition: opacity 0.3s;
+    font-size: 0.9rem;
+    height: 20px;
   }
   
-  .status-show { opacity: 1 !important; }
-  .status-success { color: var(--success); }
+  .status-success { color: var(--volts-yellow); }
   .status-error { color: var(--error); }
-
-  /* Loading Spinner */
-  .spinner {
-    display: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
 
 </style>
 </head>
