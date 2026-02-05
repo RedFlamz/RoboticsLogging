@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NFC Check-In</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #111;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .box {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+  }
+  input, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+  }
+  button {
+    background: #4caf50;
+    color: #000;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>NFC Check-In</h2>
+  <input id="nameInput" placeholder="Enter your name" />
+  <button onclick="checkIn()">Check In</button>
+  <p id="status"></p>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYn8wO47S2j8bmtkCUEf4y19YhCo8kGiYzuwxQS8Kocx93LXwTzZcovMO_jQTLtSlx/exec";
+
+function setCookie(name, value, days = 365) {
+  const d = new Date();
+  d.setTime(d.getTime() + (days*24*60*60*1000));
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+  return document.cookie
+    .split('; ')
+    .find(row => row.startsWith(name + '='))
+    ?.split('=')[1];
+}
+
+function checkIn() {
+  const input = document.getElementById("nameInput");
+  const status = document.getElementById("status");
+  const name = input.value.trim();
+
+  if (!name) {
+    status.textContent = "Please enter a name.";
+    return;
+  }
+
+  setCookie("username", name);
+
+  fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&ua=${encodeURIComponent(navigator.userAgent)}`)
+    .then(() => {
+      status.textContent = "Check-in logged ✔";
+    })
+    .catch(() => {
+      status.textContent = "Error logging check-in.";
+    });
+}
+
+window.onload = () => {
+  const saved = getCookie("username");
+  if (saved) {
+    document.getElementById("nameInput").value = decodeURIComponent(saved);
+  }
+};
+</script>
+
+</body>
+</html>
