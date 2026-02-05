@@ -3,47 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <title>NFC Check-In</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
+  :root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --bg-gradient: radial-gradient(circle at top left, #1e293b, #0f172a);
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --success: #10b981;
+    --error: #ef4444;
+  }
+
+  * { box-sizing: border-box; }
+
   body {
-    font-family: system-ui, sans-serif;
-    background: #111;
-    color: #fff;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0f172a; /* Fallback */
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+    color: var(--text-main);
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-  }
-  .box {
-    background: #1e1e1e;
     padding: 20px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 350px;
-    text-align: center;
   }
-  input, button {
+
+  .box {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 40px 30px;
+    border-radius: 24px;
     width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
+    max-width: 380px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+
+  /* Icon Animation */
+  .icon-wrapper {
+    background: rgba(99, 102, 241, 0.1);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    color: var(--primary);
+  }
+  
+  .icon-wrapper svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  h2 {
+    margin: 0 0 8px 0;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  p.subtitle {
+    margin: 0 0 30px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .input-group {
+    position: relative;
+    margin-bottom: 15px;
+  }
+
+  input {
+    width: 100%;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  input:focus {
+    border-color: var(--primary);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  button {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
     border: none;
     font-size: 16px;
-  }
-  button {
-    background: #4caf50;
-    color: #000;
+    font-weight: 600;
+    background: var(--primary);
+    color: white;
     cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
+
+  button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+
+  button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  /* Status Messages */
+  #status {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    min-height: 24px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .status-show { opacity: 1 !important; }
+  .status-success { color: var(--success); }
+  .status-error { color: var(--error); }
+
+  /* Loading Spinner */
+  .spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
 </style>
 </head>
 <body>
 
 <div class="box">
-  <h2>NFC Check-In</h2>
-  <input id="nameInput" placeholder="Enter your name" />
-  <button onclick="checkIn()">Check In</button>
+  <div class="icon-wrapper">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+    </svg>
+  </div>
+  
+  <h2>Welcome</h2>
+  <p class="subtitle">Please scan or enter your details below.</p>
+  
+  <div class="input-group">
+    <input id="nameInput" placeholder="Enter your full name" autocomplete="off" />
+  </div>
+  
+  <button id="checkInBtn" onclick="checkIn()">
+    <span class="btn-text">Check In</span>
+    <div class="spinner"></div>
+  </button>
+  
   <p id="status"></p>
 </div>
 
@@ -66,21 +214,48 @@ function getCookie(name) {
 function checkIn() {
   const input = document.getElementById("nameInput");
   const status = document.getElementById("status");
+  const btn = document.getElementById("checkInBtn");
+  const btnText = btn.querySelector(".btn-text");
+  const spinner = btn.querySelector(".spinner");
+  
   const name = input.value.trim();
 
+  // Reset status styling
+  status.className = "";
+  status.classList.remove("status-show");
+
   if (!name) {
-    status.textContent = "Please enter a name.";
+    status.textContent = "Please enter your name first.";
+    status.classList.add("status-error", "status-show");
+    // Shake animation
+    input.style.borderColor = "#ef4444";
+    setTimeout(() => input.style.borderColor = "rgba(255, 255, 255, 0.1)", 2000);
     return;
   }
+
+  // Set Loading State
+  btn.disabled = true;
+  btnText.textContent = "Processing...";
+  spinner.style.display = "block";
+  status.textContent = "";
 
   setCookie("username", name);
 
   fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&ua=${encodeURIComponent(navigator.userAgent)}`)
     .then(() => {
-      status.textContent = "Check-in logged ✔";
+      status.textContent = "Successfully checked in! ✔";
+      status.classList.add("status-success", "status-show");
+      input.value = ""; // Optional: Clear input on success
     })
     .catch(() => {
-      status.textContent = "Error logging check-in.";
+      status.textContent = "Connection error. Please try again.";
+      status.classList.add("status-error", "status-show");
+    })
+    .finally(() => {
+      // Reset Button
+      btn.disabled = false;
+      btnText.textContent = "Check In";
+      spinner.style.display = "none";
     });
 }
 
