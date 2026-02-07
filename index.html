@@ -9,16 +9,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    /* Colors extracted from the Volts Logo */
-    --volts-green: #377344;   /* The "V" color */
-    --volts-yellow: #dce74e;  /* The Lightning Bolt color */
-    --volts-dark: #1a261c;    /* Deep background */
-    --volts-slate: #2f3a30;   /* Card background */
+    --volts-green: #377344;
+    --volts-yellow: #dce74e;
+    --volts-dark: #1a261c;
+    --volts-slate: #2f3a30;
     --text-white: #ffffff;
     --error: #ef4444;
   }
@@ -28,7 +26,6 @@
   body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--volts-dark);
-    /* A subtle technical grid pattern in the background */
     background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 30px 30px;
@@ -43,13 +40,11 @@
 
   .box {
     background: var(--volts-slate);
-    padding: 40px 30px;
-    /* Sharp corners like the lightning bolt */
+    padding: 30px;
     border-radius: 4px; 
     width: 100%;
-    max-width: 360px;
+    max-width: 420px;
     text-align: center;
-    /* The Green "V" border accent at the top */
     border-top: 6px solid var(--volts-green);
     border-bottom: 2px solid var(--volts-green);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -57,7 +52,6 @@
     overflow: hidden;
   }
 
-  /* Decorative Lightning Bolt Effect in background of card */
   .box::before {
     content: '';
     position: absolute;
@@ -73,116 +67,172 @@
   h2 {
     font-family: 'Oswald', sans-serif;
     text-transform: uppercase;
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin: 0 0 10px 0;
     letter-spacing: 1px;
     position: relative;
     z-index: 1;
   }
 
-  /* Making the "Check-In" text pop with the yellow */
-  h2 span {
-    color: var(--volts-yellow);
-  }
+  h2 span { color: var(--volts-yellow); }
 
   p {
     color: #aebcb0;
-    margin-bottom: 30px;
+    margin-bottom: 18px;
     position: relative;
     z-index: 1;
   }
 
-  input {
+  .input-group { margin-bottom: 12px; position: relative; z-index: 1; }
+
+  input[type="text"], input[type="datetime-local"], input[type="date"], input[type="time"] {
     width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 12px;
+    margin-bottom: 12px;
     background: rgba(0, 0, 0, 0.3);
     border: 2px solid var(--volts-green);
     border-radius: 4px;
     color: #fff;
-    font-size: 16px;
+    font-size: 15px;
     font-family: 'Roboto', sans-serif;
     outline: none;
     transition: all 0.2s;
-    position: relative;
-    z-index: 1;
   }
 
-  input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 1px;
-  }
+  input::placeholder { color: rgba(255,255,255,0.4); font-size: 12px; }
 
-  input:focus {
-    /* When focused, it glows with the Bolt Yellow */
-    border-color: var(--volts-yellow);
-    box-shadow: 0 0 15px rgba(220, 231, 78, 0.2);
-  }
+  input:focus { border-color: var(--volts-yellow); box-shadow: 0 0 15px rgba(220, 231, 78, 0.15); }
+
+  .flex-row { display:flex; gap:10px; align-items:center; justify-content:center; margin-bottom:12px; }
+  .toggle { display:flex; align-items:center; gap:8px; color:#cfe3c9; font-size:14px; }
+
+  .btn-row { display:flex; gap:10px; align-items:center; }
 
   button {
     width: 100%;
-    padding: 15px;
+    padding: 14px;
     background: var(--volts-green);
     color: #fff;
     font-family: 'Oswald', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 1px;
     text-transform: uppercase;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
     z-index: 1;
   }
 
-  /* Button Hover Effect: High Voltage */
   button:hover {
     background: var(--volts-yellow);
-    color: var(--volts-dark); /* Dark text on yellow bg for contrast */
-    box-shadow: 0 0 20px rgba(220, 231, 78, 0.4);
-    transform: skewX(-2deg); /* Slight angular tilt */
+    color: var(--volts-dark);
+    box-shadow: 0 0 20px rgba(220, 231, 78, 0.35);
+    transform: skewX(-2deg);
   }
 
-  button:active {
-    transform: scale(0.98);
-  }
+  button:active { transform: scale(0.98); }
 
-  /* Status Messages */
-  #status {
-    margin-top: 20px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    height: 20px;
-  }
+  #status { margin-top: 14px; font-weight: 500; font-size: 0.9rem; height: 20px; color:#cfe3c9; }
 
- 
-  
   .status-success { color: var(--volts-yellow); }
   .status-error { color: var(--error); }
+
+  .spinner {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin-left:8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .small { font-size: 12px; color:#aebcb0; }
+
+  .preview {
+    background: rgba(0,0,0,0.25);
+    border: 1px dashed rgba(255,255,255,0.06);
+    padding: 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 13px;
+    color: #e6f0df;
+  }
+
+  label.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+  }
+  label.switch input { display:none; }
+  .slider {
+    position:absolute; cursor:pointer; inset:0; background:#333; border-radius:24px;
+    transition: .2s; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.03);
+  }
+  .slider:before {
+    content:""; position:absolute; width:18px; height:18px; left:3px; top:3px;
+    background:white; border-radius:50%; transition:.2s;
+  }
+  label.switch input:checked + .slider { background: var(--volts-green); }
+  label.switch input:checked + .slider:before { transform: translateX(20px); background: var(--volts-yellow); }
+
+  /* responsive */
+  @media (max-width:420px) {
+    .box { padding: 22px; max-width: 360px; }
+  }
 
 </style>
 </head>
 <body>
 
 <div class="box">
-  
-  
-  <h2>Welcome To 5505 Robotics</h2>
-  <p class="subtitle">Please Enter Name Below.</p>
-  
+  <h2>Welcome To 5505 <span>Robotics</span></h2>
+  <p class="subtitle">Please enter name and check in.</p>
+
   <div class="input-group">
-    <input id="nameInput" placeholder="Enter first and last name" autocomplete="off" />
+    <input id="nameInput" type="text" placeholder="Enter first and last name" autocomplete="off" />
   </div>
-  
-  <button id="checkInBtn" onclick="checkIn()">
-    <span class="btn-text">Check In</span>
-    <div class="spinner"></div>
-  </button>
-  
+
+  <div class="flex-row" style="justify-content:space-between; margin-bottom:8px;">
+    <div class="toggle">
+      <label class="switch" title="Advanced / manual datetime">
+        <input id="advancedToggle" type="checkbox" />
+        <span class="slider"></span>
+      </label>
+      <span style="margin-left:8px;">Advanced</span>
+    </div>
+
+    <div style="text-align:right;">
+      <div class="small">Time (local)</div>
+      <div id="liveTime" class="small" style="font-family:monospace">--</div>
+    </div>
+  </div>
+
+  <!-- Manual controls (shown when Advanced is toggled) -->
+  <div id="advancedControls" style="display:none; margin-bottom:10px;">
+    <div class="small" style="text-align:left; margin-bottom:6px;">Manual date &amp; time</div>
+    <!-- datetime-local is used for manual entry; browsers vary on second support -->
+    <input id="manualDatetime" type="datetime-local" step="60" />
+    <div class="preview" id="manualPreview">No manual time selected</div>
+  </div>
+
+  <!-- Live preview and hidden fields -->
+  <div style="margin-bottom:12px;">
+    <div class="small" style="text-align:left; margin-bottom:6px;">Preview (will be sent):</div>
+    <div class="preview" id="sendPreview">Name: — | Time: —</div>
+  </div>
+
+  <div class="btn-row">
+    <button id="checkInBtn" onclick="checkIn()">
+      <span class="btn-text">Check In</span>
+      <div class="spinner" id="btnSpinner"></div>
+    </button>
+  </div>
+
   <p id="status"></p>
 </div>
 
@@ -202,60 +252,202 @@ function getCookie(name) {
     ?.split('=')[1];
 }
 
+/* --- date/time helpers --- */
+function leftPad(n, width=2) { return String(n).padStart(width, '0'); }
+
+function formatLocalDateTime(dt) {
+  // human-friendly: YYYY-MM-DD HH:MM:SS (local)
+  return `${dt.getFullYear()}-${leftPad(dt.getMonth()+1)}-${leftPad(dt.getDate())} ${leftPad(dt.getHours())}:${leftPad(dt.getMinutes())}:${leftPad(dt.getSeconds())}`;
+}
+
+function formatIsoWithTZ(dt) {
+  // YYYY-MM-DDTHH:MM:SS±HH:MM (local)
+  const datePart = `${dt.getFullYear()}-${leftPad(dt.getMonth()+1)}-${leftPad(dt.getDate())}`;
+  const timePart = `${leftPad(dt.getHours())}:${leftPad(dt.getMinutes())}:${leftPad(dt.getSeconds())}`;
+  // timezone offset: convert to +HH:MM or -HH:MM
+  const tzMin = -dt.getTimezoneOffset(); // minutes east of UTC
+  const sign = tzMin >= 0 ? "+" : "-";
+  const absMin = Math.abs(tzMin);
+  const tzHH = leftPad(Math.floor(absMin / 60));
+  const tzMM = leftPad(absMin % 60);
+  return `${datePart}T${timePart}${sign}${tzHH}:${tzMM}`;
+}
+
+function datetimeLocalToDate(value) {
+  // value from <input type="datetime-local"> is like 'YYYY-MM-DDTHH:MM' (no tz)
+  if (!value) return null;
+  // append seconds = 0
+  const parts = value.split('T');
+  if (parts.length !== 2) return null;
+  const [d, t] = parts;
+  // If browser included seconds, handle them
+  const timeParts = t.split(':');
+  const hh = parseInt(timeParts[0] || 0,10);
+  const mm = parseInt(timeParts[1] || 0,10);
+  const ss = parseInt(timeParts[2] || 0,10) || 0;
+  const [y,m,day] = d.split('-').map(x => parseInt(x,10));
+  const dt = new Date(y, m-1, day, hh, mm, ss);
+  return dt;
+}
+
+/* --- UI wiring --- */
+const advancedToggle = document.getElementById('advancedToggle');
+const advControls = document.getElementById('advancedControls');
+const manualInput = document.getElementById('manualDatetime');
+const manualPreview = document.getElementById('manualPreview');
+const liveTime = document.getElementById('liveTime');
+const sendPreview = document.getElementById('sendPreview');
+const status = document.getElementById('status');
+const nameInput = document.getElementById('nameInput');
+const spinner = document.getElementById('btnSpinner');
+const checkInBtn = document.getElementById('checkInBtn');
+
+let liveTimerInterval = null;
+
+function updateLiveClock() {
+  const now = new Date();
+  liveTime.textContent = formatLocalDateTime(now);
+  updateSendPreview();
+}
+
+function startLiveClock() {
+  updateLiveClock();
+  if (liveTimerInterval) clearInterval(liveTimerInterval);
+  liveTimerInterval = setInterval(updateLiveClock, 1000);
+}
+
+function stopLiveClock() {
+  if (liveTimerInterval) { clearInterval(liveTimerInterval); liveTimerInterval = null; }
+}
+
+function updateManualPreview() {
+  const val = manualInput.value;
+  if (!val) {
+    manualPreview.textContent = 'No manual time selected';
+  } else {
+    const dt = datetimeLocalToDate(val);
+    if (dt) manualPreview.textContent = formatLocalDateTime(dt) + ' (' + formatIsoWithTZ(dt) + ')';
+    else manualPreview.textContent = 'Invalid manual time';
+  }
+  updateSendPreview();
+}
+
+function updateSendPreview() {
+  const name = nameInput.value.trim() || '—';
+  let chosenDate = null;
+  if (advancedToggle.checked) {
+    chosenDate = datetimeLocalToDate(manualInput.value);
+  } else {
+    chosenDate = new Date();
+  }
+  const formatted = chosenDate ? formatLocalDateTime(chosenDate) : '—';
+  sendPreview.textContent = `Name: ${name} | Time: ${formatted}`;
+}
+
+/* Toggle behavior */
+advancedToggle.addEventListener('change', () => {
+  const on = advancedToggle.checked;
+  advControls.style.display = on ? 'block' : 'none';
+  if (on) {
+    stopLiveClock();
+  } else {
+    startLiveClock();
+  }
+  updateSendPreview();
+});
+
+/* When manual changes, update preview */
+manualInput.addEventListener('input', updateManualPreview);
+
+/* --- checkin submission --- */
+function showStatus(text, ok=true) {
+  status.textContent = text;
+  status.className = ok ? 'status-success' : 'status-error';
+}
+
+function setLoading(isLoading) {
+  if (isLoading) {
+    spinner.style.display = 'inline-block';
+    checkInBtn.disabled = true;
+  } else {
+    spinner.style.display = 'none';
+    checkInBtn.disabled = false;
+  }
+}
+
+function buildPayload(name, chosenDate) {
+  // chosenDate: Date object (local)
+  return {
+    name: name,
+    ua: navigator.userAgent,
+    datetime_local: formatLocalDateTime(chosenDate),
+    datetime_iso_tz: formatIsoWithTZ(chosenDate)
+  };
+}
+
 function checkIn() {
-  const input = document.getElementById("nameInput");
-  const status = document.getElementById("status");
-  const btn = document.getElementById("checkInBtn");
-  const btnText = btn.querySelector(".btn-text");
-  const spinner = btn.querySelector(".spinner");
-  
-  const name = input.value.trim();
-
-  // Reset status styling
   status.className = "";
-  status.classList.remove("status-show");
-
+  const name = nameInput.value.trim();
   if (!name) {
-    status.textContent = "Please enter your name first.";
-    status.classList.add("status-error", "status-show");
-    // Shake animation
-    input.style.borderColor = "#ef4444";
-    setTimeout(() => input.style.borderColor = "rgba(255, 255, 255, 0.1)", 2000);
+    showStatus("Please enter your name first.", false);
+    nameInput.style.borderColor = "#ef4444";
+    setTimeout(() => nameInput.style.borderColor = "rgba(255, 255, 255, 0.1)", 2000);
     return;
   }
 
-  // Set Loading State
-  btn.disabled = true;
-  btnText.textContent = "Processing...";
-  spinner.style.display = "block";
-  status.textContent = "";
+  // Determine timestamp
+  let chosenDate = null;
+  if (advancedToggle.checked) {
+    chosenDate = datetimeLocalToDate(manualInput.value);
+    if (!chosenDate) {
+      showStatus("Please enter a valid date & time in Advanced mode.", false);
+      return;
+    }
+  } else {
+    chosenDate = new Date();
+  }
 
+  // Save cookie
   setCookie("username", name);
 
-  fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&ua=${encodeURIComponent(navigator.userAgent)}`)
-    .then(() => {
-      status.textContent = "Successfully checked in! ✔";
-      status.classList.add("status-success", "status-show");
-      input.value = ""; // Optional: Clear input on success
-    })
-    .catch(() => {
-      status.textContent = "Connection error. Please try again.";
-      status.classList.add("status-error", "status-show");
-    })
-    .finally(() => {
-      // Reset Button
-      btn.disabled = false;
-      btnText.textContent = "Check In";
-      spinner.style.display = "none";
-    });
+  const payload = buildPayload(name, chosenDate);
+
+  // Visual
+  setLoading(true);
+  showStatus("");
+
+  // Use GET query params for compatibility with many Apps Script setups
+  const params = new URLSearchParams();
+  Object.keys(payload).forEach(k => params.append(k, payload[k]));
+
+  fetch(`${SCRIPT_URL}?${params.toString()}`, {
+    method: 'GET',
+    cache: 'no-cache',
+  })
+  .then(response => {
+    // Many scripts return 200 regardless; handle non-OK
+    if (!response.ok) throw new Error('network');
+    showStatus("Successfully checked in! ✔", true);
+    // Optionally clear input:
+    // nameInput.value = '';
+  })
+  .catch(err => {
+    console.error(err);
+    showStatus("Connection error. Please try again.", false);
+  })
+  .finally(() => setLoading(false));
 }
 
-window.onload = () => {
+/* --- on load: restore cookie and initialize --- */
+window.addEventListener('load', () => {
   const saved = getCookie("username");
   if (saved) {
-    document.getElementById("nameInput").value = decodeURIComponent(saved);
+    nameInput.value = decodeURIComponent(saved);
   }
-};
+  // Start with live clock by default
+  startLiveClock();
+  updateSendPreview();
+});
 </script>
 
 </body>
