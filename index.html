@@ -11,7 +11,6 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
-  
 <style>
   :root {
     --volts-green: #377344;
@@ -257,16 +256,13 @@ function getCookie(name) {
 function leftPad(n, width=2) { return String(n).padStart(width, '0'); }
 
 function formatLocalDateTime(dt) {
-  // human-friendly: YYYY-MM-DD HH:MM:SS (local)
   return `${dt.getFullYear()}-${leftPad(dt.getMonth()+1)}-${leftPad(dt.getDate())} ${leftPad(dt.getHours())}:${leftPad(dt.getMinutes())}:${leftPad(dt.getSeconds())}`;
 }
 
 function formatIsoWithTZ(dt) {
-  // YYYY-MM-DDTHH:MM:SS±HH:MM (local)
   const datePart = `${dt.getFullYear()}-${leftPad(dt.getMonth()+1)}-${leftPad(dt.getDate())}`;
   const timePart = `${leftPad(dt.getHours())}:${leftPad(dt.getMinutes())}:${leftPad(dt.getSeconds())}`;
-  // timezone offset: convert to +HH:MM or -HH:MM
-  const tzMin = -dt.getTimezoneOffset(); // minutes east of UTC
+  const tzMin = -dt.getTimezoneOffset();
   const sign = tzMin >= 0 ? "+" : "-";
   const absMin = Math.abs(tzMin);
   const tzHH = leftPad(Math.floor(absMin / 60));
@@ -274,14 +270,26 @@ function formatIsoWithTZ(dt) {
   return `${datePart}T${timePart}${sign}${tzHH}:${tzMM}`;
 }
 
+// NEW: format exactly as Apps Script expects: MM/dd/yyyy hh:mm:ss a  (12-hour with AM/PM)
+function formatForAppsScript(dt) {
+  const MM = leftPad(dt.getMonth() + 1);
+  const dd = leftPad(dt.getDate());
+  const yyyy = dt.getFullYear();
+  let hh = dt.getHours();
+  const mm = leftPad(dt.getMinutes());
+  const ss = leftPad(dt.getSeconds());
+  const ampm = hh >= 12 ? 'PM' : 'AM';
+  hh = hh % 12;
+  if (hh === 0) hh = 12;
+  const hhStr = leftPad(hh);
+  return `${MM}/${dd}/${yyyy} ${hhStr}:${mm}:${ss} ${ampm}`;
+}
+
 function datetimeLocalToDate(value) {
-  // value from <input type="datetime-local"> is like 'YYYY-MM-DDTHH:MM' (no tz)
   if (!value) return null;
-  // append seconds = 0
   const parts = value.split('T');
   if (parts.length !== 2) return null;
   const [d, t] = parts;
-  // If browser included seconds, handle them
   const timeParts = t.split(':');
   const hh = parseInt(timeParts[0] || 0,10);
   const mm = parseInt(timeParts[1] || 0,10);
@@ -341,8 +349,8 @@ function updateSendPreview() {
   } else {
     chosenDate = new Date();
   }
-  const formatted = chosenDate ? formatLocalDateTime(chosenDate) : '—';
-  sendPreview.textContent = `Name: ${name} | Time: ${formatted}`;
+  const formatted = chosenDate ? formatForAppsScript(chosenDate) : '—';
+  sendPreview.textContent = `Name: ${name} | Time (AppsScript): ${formatted}`;
 }
 
 /* Toggle behavior */
@@ -382,7 +390,9 @@ function buildPayload(name, chosenDate) {
     name: name,
     ua: navigator.userAgent,
     datetime_local: formatLocalDateTime(chosenDate),
-    datetime_iso_tz: formatIsoWithTZ(chosenDate)
+    datetime_iso_tz: formatIsoWithTZ(chosenDate),
+    // Apps Script expects this param name/format:
+    timestamp: formatForAppsScript(chosenDate)
   };
 }
 
@@ -417,7 +427,7 @@ function checkIn() {
   setLoading(true);
   showStatus("");
 
-  // Use GET query params for compatibility with many Apps Script setups
+  // Send timestamp param expected by Apps Script
   const params = new URLSearchParams();
   Object.keys(payload).forEach(k => params.append(k, payload[k]));
 
@@ -426,11 +436,8 @@ function checkIn() {
     cache: 'no-cache',
   })
   .then(response => {
-    // Many scripts return 200 regardless; handle non-OK
     if (!response.ok) throw new Error('network');
     showStatus("Successfully checked in! ✔", true);
-    // Optionally clear input:
-    // nameInput.value = '';
   })
   .catch(err => {
     console.error(err);
@@ -445,7 +452,6 @@ window.addEventListener('load', () => {
   if (saved) {
     nameInput.value = decodeURIComponent(saved);
   }
-  // Start with live clock by default
   startLiveClock();
   updateSendPreview();
 });
